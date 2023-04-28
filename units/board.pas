@@ -20,17 +20,20 @@ type
         procedure ResetWhitePieces;
         procedure ResetBlackPieces;
 
+        procedure SetTile(column, line: shortint, AValue : TTile);
+        function GetTile(column, line: shortint): TTile;
+
     public
+        property Board[column, Line: shortint] read GetTile;
         constructor Create();
         procedure ResetBoard();
-        procedure DrawBoard;
-        
+        procedure DrawBoard;        
     end;
 
 implementation
 
 uses
-    crt;
+    crt, Exceptions;
 
     constructor TBoard.Create();
     var
@@ -161,5 +164,27 @@ uses
                     PBoard[column, line].TextOut();
                 end;
     end;
+
+    Procedure TBoard.SetTile(column, line: shortint, AValue : TTile);
+    begin
+        if not(column in [1..8]) then
+            raise Exception.Create('Coluna inválida');
+        if not(line in [1..8]) then
+            raise Exception.Create('Linha inválida');
+
+        PBoard[column, line] := AValue;
+    end;
+
+    Function TBoard.GetTile(column, line: shortint) : TTile;
+    begin
+        if not(column in [1..8]) then
+            raise Exception.Create('Coluna inválida');
+        if not(line in [1..8]) then
+            raise Exception.Create('Linha inválida');
+        
+        Result := PBoard[column, line];        
+    end;
+
+
 
 end.
